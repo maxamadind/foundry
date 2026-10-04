@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}{{ agent['name'] }} — Foundry{% endblock %}
+{% block content %}
+<div class="agent-head">
+  <h1 class="page-title">{{ agent['name'] }}</h1>
+  {% if agent['tagline'] %}<p class="lede">{{ agent['tagline'] }}</p>{% endif %}
+  <div class="agent-meta">
+    <span>{{ agent['doc_count'] }} source{{ 's' if agent['doc_count'] != 1 }}</span>·
+    <span>{{ agent['chunk_count'] }} passages</span>
+  </div>
+  {% if agent['payment_link'] %}
+  <div class="payrow">
+    <a class="btn pay" href="{{ agent['payment_link'] }}" target="_blank" rel="noopener">Subscribe / pay</a>
+    <span class="muted">Unlock full access to {{ agent['name'] }}</span>
+  </div>
+  {% endif %}
+  {% if is_admin %}
+  <details class="payadmin">
+    <summary>{{ 'Payment link: set' if agent['payment_link'] else 'Add a payment link' }}</summary>
+    <form method="post" action="{{ url_for('update_payment_link', agent_id=agent['id']) }}" class="payform">
+      <input type="text" name="payment_link" value="{{ agent['payment_link'] or '' }}"
+             placeholder="https://buy.stripe.com/…" maxlength="300" inputmode="url">
+      <button class="btn primary" type="submit">Save</button>
+    </form>
+    <p class="muted">Paste a Stripe Payment Link — a "Subscribe / pay" button appears on this page. Clear the field and save to remove it.</p>
+  </details>
+  {% endif %}
+  <details class="sources">
+    <summary>Sources</summary>
+    <ul>
+      {% for d in docs %}
+      <li><strong>{{ d['title'] }}</strong> <span class="muted">({{ d['word_count'] }} words)</span></li>
+      {% endfor %}
+    </ul>
+  </details>
+</div>
+
+<div id="chat" class="chat" aria-live="polite"></div>
+
+{% if suggested %}
+<div id="chips" class="chips">
+  {% for q in suggested %}<button class="chip" data-q="{{ q }}">{{ q }}</button>{% endfor %}
+</div>
+{% endif %}
+
+<form id="askform" class="askbar">
+  <input id="q" type="text" placeholder="Ask {{ agent['name'] }} anything…" autocomplete="off" maxlength="500">
+  <button class="btn primary" type="submit">Ask</button>
+</form>
+
+<script>
+const AGENT_ID = "{{ agent['id'] }}";
+const chat = document.getElementById('chat');
+const form = document.getElementById('askform');
+const input = document.getElementById('q');
+
+function addMsg(cls, html) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  d.innerHTML = html;
+  chat.appendChild(d);
+  chat.scrollTop = chat.scrollHeight;
+  return d;
+}
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function ask(question, silent) {
+  if (!silent) addMsg('user', esc(question));
+  input.value = '';
+  const thinking = addMsg('bot thinking', 'Finding the passage…');
+  try {
+    const r = await fetch('/api/chat', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({agent_id: AGENT_ID, question})
+    });
+    const data = await r.json();
+    thinking.remove();
+    if (data.error) { addMsg('bot', esc(data.error)); return; }
+    let html = '<p class="lead">' + esc(data.lead) + '</p>';
+    (data.passages || []).forEach((p, i) => {
+      const quoteHtml = esc(p.quote).replace(/\n/g, '<br>');
+      html += '<blockquote>' + quoteHtml + '</blockquote>'
+        + '<div class="cite"><span class="cite-num">[' + (i+1) + ']</span> '
+        + esc(p.doc_title) + ' <span class="muted">· ' + esc(p.section_path || 'text') + '</span></div>';
+    });
+    if (data.llm_synthesis) html += '<p class="synth">' + esc(data.llm_synthesis) + '</p>';
+    if (data.mode === 'abstain' || data.mode === 'intro') {
+      html = '<p>' + esc(data.lead) + '</p>';
+    }
+    const el = addMsg('bot', html);
+    if ((data.suggested || []).length) {
+      const wrap = document.createElement('div');
+      wrap.className = 'chips inline';
+      data.suggested.forEach(q => {
+        const b = document.createElement('button');
+        b.className = 'chip'; b.textContent = q;
+        b.onclick = () => ask(q);
+        wrap.appendChild(b);
+      });
+      el.appendChild(wrap);
+    }
+  } catch (e) {
+    thinking.remove();
+    addMsg('bot', 'Something went wrong reaching the agent. Please try again.');
+  }
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if (q) ask(q);
+});
+document.querySelectorAll('#chips .chip').forEach(b => {
+  b.addEventListener('click', () => ask(b.dataset.q));
+});
+// greeting (no user bubble)
+ask('hello', true);
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}Foundry{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">◈</span> Foundry</a>
+  <span class="topbar-note">knowledge in · agents out</span>
+</header>
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+<footer class="foot">Foundry · the AI that can't hallucinate — every claim quoted verbatim from your material</footer>
+</body>
+</html>

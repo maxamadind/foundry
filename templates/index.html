@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Foundry — your agents{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Turn what you know<br>into an agent that answers.</h1>
+  <p class="lede">Upload a book, manual, or course. Foundry builds the AI that can't
+  hallucinate — every claim quoted verbatim from your material, with the source cited.</p>
+  {% if is_admin or not admin_enabled %}
+  <a class="btn primary" href="{{ url_for('new_agent') }}">Create an agent</a>
+  {% else %}
+  <a class="btn primary" href="{{ url_for('admin_login', next='/new') }}">Create an agent</a>
+  {% endif %}
+</div>
+
+{% if agents %}
+<h2 class="section-title">Your agents</h2>
+<div class="cards">
+  {% for a in agents %}
+  <a class="card" href="{{ url_for('agent_page', slug=a['slug']) }}">
+    <div class="card-name">{{ a['name'] }}</div>
+    {% if a['tagline'] %}<div class="card-tag">{{ a['tagline'] }}</div>{% endif %}
+    <div class="card-meta">{{ a['doc_count'] }} document{{ 's' if a['doc_count'] != 1 }} · {{ a['chunk_count'] }} passages indexed</div>
+    <div class="card-link">Open chat →</div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <p>No agents yet. Create your first one — it takes about a minute.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Creator access — Foundry{% endblock %}
+{% block content %}
+<h1 class="page-title">Creator access</h1>
+<p class="lede">Enter the creator passcode to build agents or change an agent's payment link. Chat pages stay open to everyone.</p>
+
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+
+<form class="form" method="post" action="{{ url_for('admin_login', next=next) }}">
+  <input type="hidden" name="next" value="{{ next }}">
+  <label class="field">
+    <span>Passcode</span>
+    <input type="password" name="passcode" autocomplete="current-password" required autofocus>
+  </label>
+  <button class="btn primary" type="submit">Unlock creator tools</button>
+</form>
+{% endblock %}

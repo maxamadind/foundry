@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Create an agent — Foundry{% endblock %}
+{% block content %}
+<h1 class="page-title">Create an agent</h1>
+<p class="lede">Name it, describe it, upload the source material. It becomes the AI that
+can't hallucinate — every claim quoted verbatim from your material.</p>
+
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+
+<form class="form" method="post" enctype="multipart/form-data" action="{{ url_for('new_agent') }}">
+  <label class="field">
+    <span>Agent name</span>
+    <input type="text" name="name" placeholder="e.g. The Mouth Code" required maxlength="80">
+  </label>
+  <label class="field">
+    <span>Tagline <em>(optional)</em></span>
+    <input type="text" name="tagline" placeholder="e.g. Answers from 20 years of coaching notes" maxlength="140">
+  </label>
+  <label class="field">
+    <span>Description <em>(optional)</em></span>
+    <textarea name="description" rows="3" maxlength="600" placeholder="What does this agent know? Who is it for?"></textarea>
+  </label>
+  <label class="field">
+    <span>Stripe payment link <em>(optional — leave blank for a free agent)</em></span>
+    <input type="text" name="payment_link" placeholder="https://buy.stripe.com/…" maxlength="300" inputmode="url">
+    <small>Paste a Stripe Payment Link and a "Subscribe / pay" button appears on this agent's public page.</small>
+  </label>
+  <label class="field">
+    <span>Source documents</span>
+    <input type="file" name="docs" multiple accept=".pdf,.docx,.md,.markdown,.txt" required>
+    <small>PDF, Word, Markdown, or plain text. Multiple files allowed — each becomes a cited source.</small>
+  </label>
+  <button class="btn primary" type="submit">Build my agent</button>
+</form>
+
+<div class="fineprint">
+  <h3>How it works</h3>
+  <ol>
+    <li>Your files are split into passages and indexed.</li>
+    <li>The agent answers only from those passages — quoted verbatim, with the document and section cited.</li>
+    <li>Questions outside the material get an honest "that's outside my training material."</li>
+  </ol>
+</div>
+{% endblock %}
