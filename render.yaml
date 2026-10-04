@@ -1,0 +1,29 @@
+# Foundry v1 — Render Blueprint (one-tap deploy, free tier, $0, no card).
+#
+# Deploy: tap the "Deploy to Render" link in DEPLOY.md. Render prompts for
+# FOUNDRY_ADMIN_PASSCODE during setup (sync: false below) — that's the
+# creator passcode that locks agent creation on the public site.
+services:
+  - type: web
+    name: foundry
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      # Creator passcode — Render asks you to type it during deploy.
+      # Leave it EMPTY only if you want agent creation open to everyone.
+      - key: FOUNDRY_ADMIN_PASSCODE
+        sync: false
+      # Flask session secret — auto-generated, keeps admin logins stable.
+      - key: FOUNDRY_SECRET_KEY
+        generateValue: true
+
+# --- Free-tier disk honesty (documented, not hidden) ---
+# Render's free tier has an ephemeral filesystem: anything created through
+# the public site (new agents, uploads) SURVIVES idle spin-downs but is
+# WIPED on every redeploy. The demo agent's index is baked into the Docker
+# image at build time, so the public site always works after a redeploy —
+# only owner-added agents need re-creating. If permanent persistence is ever
+# wanted: attach a Render Disk (paid) or move to Oracle Cloud Always Free
+# (persistent VM, $0/month, but signup requires a card).

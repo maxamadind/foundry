@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+foundry.db
+foundry.db-wal
+foundry.db-shm
+uploads/*
+!uploads/.gitkeep
