@@ -1,0 +1,160 @@
+/* Foundry v1 — Apple-style restraint. System type, generous whitespace, one accent. */
+:root {
+  --ink: #1d1d1f;
+  --ink-soft: #515154;
+  --muted: #86868b;
+  --line: #e8e8ea;
+  --bg: #fbfbfd;
+  --card: #ffffff;
+  --accent: #0a66ff;
+  --accent-soft: #eef4ff;
+  --radius: 14px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.55;
+  font-size: 16px;
+}
+.topbar {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 10;
+}
+.brand { font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; }
+.brand-mark { color: var(--accent); }
+.topbar-note { color: var(--muted); font-size: 13px; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 60px; }
+.foot { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; border-top: 1px solid var(--line); }
+
+.hero { padding: 32px 0 8px; }
+.hero h1, .page-title {
+  font-size: clamp(30px, 6vw, 44px);
+  line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 12px;
+  font-weight: 700;
+}
+.lede { color: var(--ink-soft); font-size: 17px; max-width: 34em; margin: 0 0 20px; }
+
+.btn {
+  display: inline-block; border: 0; cursor: pointer;
+  font-size: 16px; font-weight: 600;
+  padding: 12px 22px; border-radius: 999px;
+  text-decoration: none; font-family: inherit;
+}
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:active { transform: scale(.98); }
+.btn.pay { background: #0a7a3d; color: #fff; }
+.btn.pay:active { transform: scale(.98); }
+
+.payrow { display: flex; align-items: center; gap: 14px; margin: 18px 0 4px; flex-wrap: wrap; }
+.payadmin { margin-top: 16px; font-size: 14px; }
+.payadmin summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.payform { display: flex; gap: 8px; margin: 10px 0 6px; }
+.payform input {
+  flex: 1; font: inherit; font-size: 15px;
+  padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px;
+  background: #fff; min-width: 0;
+}
+.payform .btn { padding: 10px 20px; }
+
+.section-title { font-size: 20px; margin: 36px 0 14px; letter-spacing: -0.01em; }
+.cards { display: grid; gap: 12px; }
+.card {
+  display: block; background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px 20px;
+  text-decoration: none; color: var(--ink);
+}
+.card:active { background: #f5f5f7; }
+.card-name { font-weight: 700; font-size: 18px; }
+.card-tag { color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+.card-meta { color: var(--muted); font-size: 13px; margin-top: 8px; }
+.card-link { color: var(--accent); font-size: 14px; font-weight: 600; margin-top: 6px; }
+.empty { color: var(--muted); padding: 24px 0; }
+
+.alert {
+  background: #fff3f3; border: 1px solid #f3c2c2; color: #a33;
+  padding: 12px 16px; border-radius: var(--radius); margin-bottom: 16px;
+}
+.form { display: grid; gap: 16px; margin-top: 8px; }
+.field { display: grid; gap: 6px; }
+.field > span { font-weight: 600; font-size: 14px; }
+.field > span em { font-weight: 400; color: var(--muted); font-style: normal; }
+.field input[type=text], .field textarea {
+  font: inherit; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  width: 100%;
+}
+.field input[type=file] { font: inherit; font-size: 14px; }
+.field small { color: var(--muted); font-size: 13px; }
+.fineprint { margin-top: 36px; color: var(--ink-soft); font-size: 14px; }
+.fineprint h3 { font-size: 15px; color: var(--ink); margin-bottom: 6px; }
+.fineprint ol { padding-left: 20px; margin: 0; display: grid; gap: 6px; }
+
+/* ---- agent chat ---- */
+.agent-head { margin-bottom: 8px; }
+.agent-meta { color: var(--muted); font-size: 14px; display: flex; gap: 6px; }
+.sources { margin-top: 10px; font-size: 14px; }
+.sources summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+.sources ul { margin: 8px 0 0; padding-left: 20px; color: var(--ink-soft); }
+.muted { color: var(--muted); }
+
+.chat { display: flex; flex-direction: column; gap: 10px; padding: 16px 0 8px; }
+.msg {
+  max-width: 92%; padding: 12px 16px; border-radius: 18px;
+  font-size: 15px; overflow-wrap: break-word;
+}
+.msg.user {
+  align-self: flex-end; background: var(--accent); color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.msg.bot {
+  align-self: flex-start; background: var(--card);
+  border: 1px solid var(--line); border-bottom-left-radius: 6px;
+  max-width: 100%; width: 100%;
+}
+.msg.thinking { color: var(--muted); font-style: italic; }
+.msg .lead { margin: 0 0 10px; font-weight: 600; font-size: 14px; color: var(--ink-soft); }
+.msg blockquote {
+  margin: 10px 0 4px; padding: 4px 0 4px 14px;
+  border-left: 3px solid var(--accent);
+  font-size: 15px; color: var(--ink);
+}
+.msg .cite { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+.cite-num {
+  display: inline-block; min-width: 22px; text-align: center;
+  background: var(--accent-soft); color: var(--accent);
+  border-radius: 6px; font-weight: 700; font-size: 12px; padding: 1px 4px;
+}
+.msg .synth { font-size: 14px; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 10px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 12px; }
+.chips.inline { padding: 10px 0 2px; }
+.chip {
+  font: inherit; font-size: 13.5px; cursor: pointer;
+  border: 1px solid var(--line); background: #fff; color: var(--ink);
+  padding: 8px 14px; border-radius: 999px;
+}
+.chip:active { background: var(--accent-soft); border-color: var(--accent); }
+
+.askbar {
+  display: flex; gap: 8px; padding: 12px 0 4px;
+  position: sticky; bottom: 0; background: var(--bg);
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+.askbar input {
+  flex: 1; font: inherit; font-size: 16px;
+  padding: 12px 16px; border: 1px solid var(--line); border-radius: 999px;
+  background: #fff; min-width: 0;
+}
+.askbar input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+
+@media (min-width: 700px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+}
