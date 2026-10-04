@@ -38,7 +38,7 @@ def main():
             payment_link=spec.get("payment_link", ""),
         )
         docs_dir = ROOT / spec["docs_dir"] if not str(spec["docs_dir"]).startswith("/") else Path(spec["docs_dir"])
-        files = sorted(p for p in docs_dir.iterdir()
+        files = sorted(p for p in (docs_dir.iterdir() if docs_dir.is_dir() else [])
                        if p.suffix.lower() in SUPPORTED and p.is_file())
         if not files:
             print(f"[{slug}] WARNING: no documents found in {docs_dir}")
