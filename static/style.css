@@ -24,9 +24,8 @@ body {
   display: flex; align-items: baseline; gap: 12px;
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(12px);
-  position: sticky; top: 0; z-index: 10;
+  background: rgba(255,255,255,.97);
+  position: static;
 }
 .brand { font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; }
 .brand-mark { color: var(--accent); }
