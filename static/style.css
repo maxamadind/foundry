@@ -20,13 +20,7 @@ body {
   line-height: 1.55;
   font-size: 16px;
 }
-.topbar {
-  display: flex; align-items: baseline; gap: 12px;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(255,255,255,.97);
-  position: static;
-}
+.topbar { display: none; }
 .brand { font-weight: 700; font-size: 19px; color: var(--ink); text-decoration: none; }
 .brand-mark { color: var(--accent); }
 .topbar-note { color: var(--muted); font-size: 13px; }
